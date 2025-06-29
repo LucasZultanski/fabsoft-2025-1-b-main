@@ -1,0 +1,48 @@
+### Obter todos os eventos
+GET http://localhost:8080/api/v1/eventos
+Accept: application/json
+
+###
+
+### Criar um novo evento
+POST http://localhost:8080/api/v1/eventos
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nome": "Exposição de Arte Moderna",
+  "dataHora": "2023-10-05T18:00:00",
+  "local": "Museu de Arte Moderna",
+  "usuariosNotificados": [
+    {
+      "id": 1
+    },
+    {
+      "id": 2
+    }
+  ]
+}
+
+###
+
+### Atualizar um evento existente
+PUT http://localhost:8080/api/v1/eventos/1
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nome": "Exposição de Arte Contemporânea",
+  "dataHora": "2023-10-10T19:00:00",
+  "local": "Museu de Arte Contemporânea",
+  "usuariosNotificados": [
+    {
+      "id": 1
+    }
+  ]
+}
+
+###
+
+### Excluir um evento por ID
+DELETE http://localhost:8080/api/v1/eventos/1
+Accept: application/json

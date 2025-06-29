@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Totem do Museu</title>
+    <!-- Tailwind CSS CDN for utility classes -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google Fonts - Inter for a modern look -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Vincula ao arquivo CSS externo para estilos personalizados -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="font-inter bg-gray-100 min-h-screen flex flex-col items-center justify-center p-4">
+
+    <!-- Header da página -->
+    <header class="w-full max-w-4xl bg-white shadow-lg rounded-b-xl py-4 px-6 flex justify-between items-center z-10">
+        <div class="flex items-center">
+            <!-- Ícone/Logo do Museu -->
+            <img src="https://placehold.co/40x40/2563EB/FFFFFF?text=M" alt="Logo do Museu" class="mr-3 rounded-full shadow-md">
+            <h1 class="text-3xl font-extrabold text-blue-800">Totem do Museu</h1>
+        </div>
+        <button id="adminLoginButton" class="btn-primary" onclick="showScreen('adminLoginScreen')">
+            <i class="fas fa-user-shield mr-2"></i> Área Administrativa
+        </button>
+    </header>
+
+    <!-- Container Principal do Conteúdo -->
+    <main class="w-full max-w-4xl bg-white shadow-lg rounded-xl p-8 my-8 relative flex flex-col items-center">
+
+        <!-- Botão de Voltar - Oculto na tela inicial -->
+        <button id="backButton" class="back-button absolute top-4 left-4 hidden" onclick="showScreen('homeScreen')">
+            <i class="fas fa-arrow-left"></i> Voltar
+        </button>
+
+        <!-- Tela Inicial -->
+        <div id="homeScreen" class="screen active text-center">
+            <!-- Imagem de Destaque/Banner -->
+            <img src="https://placehold.co/800x250/3B82F6/FFFFFF?text=Bem-vindo+ao+Museu" alt="Bem-vindo ao Museu" class="rounded-lg shadow-md mb-8 w-full object-cover home-banner">
+            <h2 class="text-4xl font-bold text-gray-800 mb-6">Explore, Participe e Avalie!</h2>
+            <p class="text-xl text-gray-600 mb-8">Escolha uma opção para interagir conosco:</p>
+            <div class="button-group grid grid-cols-1 md:grid-cols-2 gap-6">
+                <button class="btn-action bg-green-600 hover:bg-green-700 flex flex-col items-center justify-center" onclick="showScreen('checkinScreen')">
+                    <i class="fas fa-user-check text-5xl text-white mb-4"></i>
+                    <span class="text-2xl font-semibold text-white">Fazer Check-in</span>
+                </button>
+                <button class="btn-action bg-yellow-600 hover:bg-yellow-700 flex flex-col items-center justify-center" onclick="showScreen('avaliacaoScreen')">
+                    <i class="fas fa-star text-5xl text-white mb-4"></i>
+                    <span class="text-2xl font-semibold text-white">Avaliar Visita</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Tela de Check-in (Atualizada com novos campos e dropdowns) -->
+        <div id="checkinScreen" class="screen text-center">
+            <h2 class="text-3xl font-bold text-gray-800 mb-6">Fazer Check-in</h2>
+            <p class="text-lg text-gray-600 mb-6">Informe seus dados para registrar sua visita.</p>
+            
+            <div class="input-group mb-4">
+                <label for="checkinName" class="block text-left text-lg font-medium text-gray-700 mb-2">Nome Completo:</label>
+                <input type="text" id="checkinName" class="form-input" placeholder="Seu nome completo">
+            </div>
+
+            <div class="input-group mb-4">
+                <label for="checkinAge" class="block text-left text-lg font-medium text-gray-700 mb-2">Idade:</label>
+                <input type="number" id="checkinAge" class="form-input" placeholder="Sua idade" min="0">
+            </div>
+
+            <div class="input-group mb-4">
+                <label for="checkinGender" class="block text-left text-lg font-medium text-gray-700 mb-2">Gênero:</label>
+                <input id="checkinGender" class="form-input" placeholder="Clique para selecionar" readonly onclick="openSelectModal('genero')">
+            </div>
+
+            <div id="otherGenderContainer" style="display:none;" class="mt-2">
+                <input id="otherGenderInput" class="form-input" placeholder="Digite seu gênero...">
+            </div>
+
+            <div class="input-group mb-4">
+                <label for="checkinStateInput" class="block text-left text-lg font-medium text-gray-700 mb-2">Estado:</label>
+                <input type="text" id="checkinStateInput" class="form-input" placeholder="Clique para selecionar" readonly onclick="openSelectModal('estado')">
+            </div>
+
+            <div class="input-group mb-6">
+                <label for="checkinCityInput" class="block text-left text-lg font-medium text-gray-700 mb-2">Cidade:</label>
+                <input type="text" id="checkinCityInput" class="form-input" placeholder="Clique para selecionar" readonly disabled onclick="openSelectModal('cidade')">
+            </div>
+
+            <div class="input-group mb-6">
+                <label for="checkinEmail" class="block text-left text-lg font-medium text-gray-700 mb-2">E-mail:</label>
+                <input type="email" id="checkinEmail" class="form-input" placeholder="seuemail@exemplo.com">
+            </div>
+
+            <div class="input-group mb-6">
+                <label for="checkinPhone" class="block text-left text-lg font-medium text-gray-700 mb-2">Telefone:</label>
+                <input type="tel" id="checkinPhone" class="form-input" placeholder="(DD) XXXXX-XXXX">
+            </div>
+
+            <div class="input-group mb-6">
+                <span class="block text-left text-lg font-medium text-gray-700 mb-2">Gostaria de receber as novidades do museu?</span>
+                <div class="flex items-center space-x-6 mt-2">
+                    <label class="flex items-center cursor-pointer">
+                        <span class="switch-container">
+                            <input type="checkbox" id="notifCheckinEmail" class="switch-input">
+                            <span class="switch-slider"></span>
+                        </span>
+                        <span class="ml-3 text-gray-700">E-mail</span>
+                    </label>
+                    <label class="flex items-center cursor-pointer">
+                        <span class="switch-container">
+                            <input type="checkbox" id="notifCheckinPhone" class="switch-input">
+                            <span class="switch-slider"></span>
+                        </span>
+                        <span class="ml-3 text-gray-700">Celular</span>
+                    </label>
+                </div>
+            </div>
+
+            <p id="checkinDateTime" class="text-lg text-gray-700 mb-8"></p>
+            <button id="submitCheckinBtn" class="btn-submit bg-blue-600 hover:bg-blue-700 w-full" onclick="submitCheckin()">
+                <i class="fas fa-check-circle mr-3"></i> Confirmar Check-in
+            </button>
+        </div>
+
+        <!-- Tela de Avaliação -->
+        <div id="avaliacaoScreen" class="screen text-center">
+            <h2 class="text-3xl font-bold text-gray-800 mb-6">Avaliar Visita</h2>
+            <p class="text-lg text-gray-600 mb-6">Sua opinião é muito importante para nós! Dê uma nota de 0 a 10.</p>
+            <div class="input-group mb-6">
+                <label for="avaliacaoEmail" class="block text-left text-lg font-medium text-gray-700 mb-2">E-mail ou Telefone (para vincular sua avaliação):</label>
+                <input type="text" id="avaliacaoEmail" class="form-input" placeholder="seuemail@exemplo.com ou (DD) XXXXX-XXXX">
+            </div>
+            <div class="rating-container mb-8">
+                <div class="rating-value" id="currentRating">5</div>
+                <input type="range" min="0" max="10" value="5" class="rating-slider" id="ratingInput">
+            </div>
+            <button id="submitAvaliacaoBtn" class="btn-submit bg-blue-600 hover:bg-blue-700 w-full" onclick="submitAvaliacao()">
+                <i class="fas fa-paper-plane mr-3"></i> Enviar Avaliação
+            </button>
+        </div>
+
+        <!-- Tela de Cadastro de Notificações -->
+        <div id="notificacaoScreen" class="screen text-center">
+            <h2 class="text-3xl font-bold text-gray-800 mb-6">Cadastro para Notificações</h2>
+            <p class="text-lg text-gray-600 mb-6">Fique por dentro das novidades do museu!</p>
+            <div class="input-group mb-4">
+                <label for="signupEmail" class="block text-left text-lg font-medium text-gray-700 mb-2">E-mail:</label>
+                <input type="email" id="signupEmail" class="form-input" placeholder="seuemail@exemplo.com" required pattern="[^@\s]+@[^@\s]+\.[^@\s]+">
+            </div>
+            <div class="input-group mb-6">
+                <label for="signupPhone" class="block text-left text-lg font-medium text-gray-700 mb-2">Telefone (opcional):</label>
+                <input type="tel" id="signupPhone" class="form-input" placeholder="(DD) XXXXX-XXXX" pattern="^\(\d{2}\) \d{4,5}-\d{4}$">
+            </div>
+            <div class="checkbox-group flex flex-col items-start space-y-3 mb-8">
+                <label class="flex items-center cursor-pointer">
+                    <span class="switch-container">
+                        <input type="checkbox" id="notifExposicoes" class="switch-input" checked>
+                        <span class="switch-slider"></span>
+                    </span>
+                    <span class="ml-3 text-lg text-gray-700">Novas Exposições</span>
+                </label>
+                <label class="flex items-center cursor-pointer">
+                    <span class="switch-container">
+                        <input type="checkbox" id="notifEventos" class="switch-input" checked>
+                        <span class="switch-slider"></span>
+                    </span>
+                    <span class="ml-3 text-lg text-gray-700">Eventos Especiais</span>
+                </label>
+                <label class="flex items-center cursor-pointer">
+                    <span class="switch-container">
+                        <input type="checkbox" id="notifNovidades" class="switch-input" checked>
+                        <span class="switch-slider"></span>
+                    </span>
+                    <span class="ml-3 text-lg text-gray-700">Novidades do Museu</span>
+                </label>
+            </div>
+            <button id="submitNotificacaoBtn" class="btn-submit bg-blue-600 hover:bg-blue-700 w-full" onclick="submitNotificacao()">
+                <i class="fas fa-user-plus mr-3"></i> Cadastrar
+            </button>
+            <p class="text-sm text-gray-500 mt-5">Ao cadastrar-se, você concorda com nossa <a href="#" class="text-blue-500 hover:underline">Política de Privacidade</a>.</p>
+        </div>
+
+        <!-- Tela de Login Administrativo -->
+        <div id="adminLoginScreen" class="screen text-center">
+            <h2 class="text-3xl font-bold text-gray-800 mb-6">Login Administrativo</h2>
+            <p class="text-lg text-gray-600 mb-6">Acesso restrito para administradores.</p>
+            <div class="flex flex-col items-center w-full">
+                <div class="input-group mb-4 w-full max-w-xl">
+                    <label for="adminUsername" class="block text-left text-lg font-medium text-gray-700 mb-2">Usuário:</label>
+                    <input type="text" id="adminUsername" class="form-input w-full" placeholder="usuário">
+                </div>
+                <div class="input-group mb-6 w-full max-w-xl">
+                    <label for="adminPassword" class="block text-left text-lg font-medium text-gray-700 mb-2">Senha:</label>
+                    <input type="password" id="adminPassword" class="form-input w-full pr-12" placeholder="senha">
+                    <div class="flex items-center mt-2">
+                        <span class="switch-container">
+                            <input type="checkbox" id="toggleAdminPasswordSwitch" class="switch-input">
+                            <span class="switch-slider"></span>
+                        </span>
+                        <label for="toggleAdminPasswordSwitch" class="ml-3 text-gray-700 select-none cursor-pointer">Visualizar senha</label>
+                    </div>
+                </div>
+                <button id="loginAdminBtn" class="btn-submit bg-red-600 hover:bg-red-700 w-full max-w-xl" onclick="loginAdmin()">
+                    <i class="fas fa-sign-in-alt mr-3"></i> Entrar
+                </button>
+            </div>
+        </div>
+
+        <!-- Tela do Dashboard Administrativo -->
+        <div id="adminDashboardScreen" class="screen text-center">
+            <h2 class="text-3xl font-bold text-gray-800 mb-6">Dashboard Administrativo</h2>
+            <p class="text-lg text-gray-600 mb-8">Visão geral das interações do museu.</p>
+
+            <!-- Filtros de Data/Hora -->
+            <div class="flex flex-col md:flex-row items-center justify-center gap-4 mb-8">
+                <div class="flex flex-col items-start">
+                    <label for="filterStartDate" class="text-gray-700 font-medium mb-1">Data/Hora Inicial</label>
+                    <input type="text" id="filterStartDate" class="form-input w-48" placeholder="Selecione a data/hora inicial" autocomplete="off">
+                </div>
+                <div class="flex flex-col items-start">
+                    <label for="filterEndDate" class="text-gray-700 font-medium mb-1">Data/Hora Final</label>
+                    <input type="text" id="filterEndDate" class="form-input w-48" placeholder="Selecione a data/hora final" autocomplete="off">
+                </div>
+                <button id="filterDashboardBtn" class="btn-submit bg-blue-600 hover:bg-blue-700 flex items-center h-12 mt-6 md:mt-0" style="min-width: 120px;" onclick="applyDashboardFilters()">
+                    <i class="fas fa-filter mr-2"></i> Filtrar
+                </button>
+            </div>
+
+            <div class="dashboard-metrics grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <div class="metric-card bg-blue-50 border-blue-200">
+                    <h3 class="text-xl font-semibold text-blue-800 mb-2">Total de Check-ins (Último Mês)</h3>
+                    <p id="totalCheckins" class="text-4xl font-bold text-blue-600">0</p>
+                    <button class="btn-secondary mt-4" onclick="fetchAdminData('checkins', 'month')">
+                        <i class="fas fa-sync-alt mr-2"></i> Atualizar
+                    </button>
+                </div>
+                <div class="metric-card bg-green-50 border-green-200">
+                    <h3 class="text-xl font-semibold text-green-800 mb-2">Avaliação Média (Último Mês)</h3>
+                    <p id="averageRating" class="text-4xl font-bold text-green-600">0.0</p>
+                    <button class="btn-secondary mt-4" onclick="fetchAdminData('evaluations', 'month')">
+                        <i class="fas fa-sync-alt mr-2"></i> Atualizar
+                    </button>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <div class="metric-card bg-purple-50 border-purple-200 p-4 rounded-lg shadow-md flex flex-col items-center">
+                    <h3 class="text-lg font-semibold text-purple-800 mb-2">Check-ins por Gênero (Último Mês)</h3>
+                    <div class="w-full flex justify-center"><canvas id="checkinsByGenderChart" width="250" height="180"></canvas></div>
+                </div>
+                <div class="metric-card bg-blue-50 border-blue-200 p-4 rounded-lg shadow-md flex flex-col items-center">
+                    <h3 class="text-lg font-semibold text-blue-800 mb-2">Check-ins por Estado (Último Mês)</h3>
+                    <div class="w-full flex justify-center"><canvas id="checkinsByStateChart" width="250" height="180"></canvas></div>
+                </div>
+                <div class="metric-card bg-yellow-50 border-yellow-200 p-4 rounded-lg shadow-md flex flex-col items-center">
+                    <h3 class="text-lg font-semibold text-yellow-800 mb-2">Check-ins por Faixa Etária (Último Mês)</h3>
+                    <div class="w-full flex justify-center"><canvas id="checkinsByAgeGroupChart" width="250" height="180"></canvas></div>
+                </div>
+                <div class="metric-card bg-pink-50 border-pink-200 p-4 rounded-lg shadow-md flex flex-col items-center">
+                    <h3 class="text-lg font-semibold text-pink-800 mb-2">Check-ins por Cidade (Último Mês)</h3>
+                    <div class="w-full flex justify-center"><canvas id="checkinsByCityChart" width="250" height="180"></canvas></div>
+                </div>
+            </div>
+
+            <div class="dashboard-table-container bg-white rounded-lg shadow-md p-6">
+                <h3 class="text-2xl font-bold text-gray-800 mb-4">Últimas Avaliações</h3>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full bg-white border-collapse">
+                        <thead>
+                            <tr class="bg-gray-100 text-gray-700 uppercase text-sm leading-normal">
+                                <th class="py-3 px-6 text-left">Nota</th>
+                                <th class="py-3 px-6 text-left">Usuário (E-mail)</th>
+                                <th class="py-3 px-6 text-left">Data/Hora</th>
+                            </tr>
+                        </thead>
+                        <tbody id="evaluationsTableBody" class="text-gray-600 text-sm font-light">
+                            <tr><td colspan="3" class="text-center py-4">Nenhuma avaliação para exibir.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="dashboard-table-container bg-white rounded-lg shadow-md p-6 mt-8">
+                <h3 class="text-2xl font-bold text-gray-800 mb-4">Usuários Cadastrados</h3>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full bg-white border-collapse">
+                        <thead>
+                            <tr class="bg-gray-100 text-gray-700 uppercase text-sm leading-normal">
+                                <th class="py-3 px-6 text-left">Nome</th>
+                                <th class="py-3 px-6 text-left">E-mail</th>
+                                <th class="py-3 px-6 text-left">Telefone</th>
+                                <th class="py-3 px-6 text-left">Idade</th>
+                                <th class="py-3 px-6 text-left">Gênero</th>
+                                <th class="py-3 px-6 text-left">Estado</th>
+                                <th class="py-3 px-6 text-left">Cidade</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usersTableBody" class="text-gray-600 text-sm font-light">
+                            <tr><td colspan="7" class="text-center py-4">Nenhum usuário para exibir.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <button class="btn-submit bg-indigo-600 hover:bg-indigo-700 mt-6 w-full" onclick="exportDataToPowerBI()">
+                <i class="fas fa-file-export mr-3"></i> Exportar Dados para Power BI (Simulado)
+            </button>
+        </div>
+
+    </main>
+
+    <div id="messageModal" class="modal fixed inset-0 flex items-center justify-center z-50 p-4">
+        <div class="modal-content bg-white p-8 rounded-xl shadow-2xl text-center w-full max-w-md transform transition-all scale-95 opacity-0">
+            <div id="modalErrorIcon" class="flex justify-center mb-2" style="display:none;">
+                <svg id="errorXIcon" xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-red-600 animate-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="#fee2e2"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 9l-6 6m0-6l6 6" stroke="#dc2626" stroke-width="2"/>
+                </svg>
+            </div>
+            <div id="modalSuccessIcon" style="display:none; align-items:center; justify-content:center; margin-bottom:1.5rem;">
+                <i class="fas fa-check-circle" style="color:#22c55e; font-size:3rem;"></i>
+            </div>
+            <h3 id="modalTitle" class="text-2xl font-bold text-gray-800 mb-4"></h3>
+            <p id="modalMessage" class="text-lg text-gray-600 mb-6"></p>
+            <button class="btn-primary py-3 px-6 text-lg" onclick="closeModal()">Fechar</button>
+        </div>
+    </div>
+
+    <div id="selectModal" class="modal">
+        <div class="modal-content" style="max-width: 400px;">
+            <h3 id="selectModalTitle" class="text-xl font-bold mb-4">Selecionar</h3>
+            <input type="text" id="modalSearch" class="form-input mb-4" placeholder="Buscar...">
+            <ul id="modalOptions" class="options-list max-h-60 overflow-y-auto mb-4"></ul>
+            <button type="button" onclick="closeSelectModal()" class="btn-secondary w-full">Cancelar</button>
+        </div>
+    </div>
+
+    <div id="confetti-container" style="pointer-events:none; position:fixed; inset:0; z-index:9999; display:none;"></div>
+
+    <div id="dateTimePickerModal" class="modal fixed inset-0 flex items-center justify-center z-50 p-4" style="display:none;">
+        <div class="modal-content bg-white p-8 rounded-xl shadow-2xl text-center w-full max-w-sm min-w-[18rem]">
+            <h3 id="dateTimePickerTitle" class="text-xl font-bold text-gray-800 mb-4">Selecionar Data e Hora</h3>
+            <input type="datetime-local" id="dateTimePickerInput" class="form-input text-lg w-full mb-6" style="font-size:1.2rem; height:3rem;">
+            <div class="flex gap-4 w-full">
+                <button id="dateTimePickerCancelBtn" class="btn-secondary flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800">Cancelar</button>
+                <button id="dateTimePickerConfirmBtn" class="btn-submit bg-green-600 hover:bg-green-700 flex-1">Confirmar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</body>
+</html>

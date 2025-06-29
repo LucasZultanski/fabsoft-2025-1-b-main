@@ -1,0 +1,37 @@
+### Obter todas as avaliações
+GET http://localhost:8080/api/v1/avaliacoes
+Accept: application/json
+
+###
+
+### Criar uma nova avaliação
+POST http://localhost:8080/api/v1/avaliacoes
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nota": 8,
+  "dataHora": "2023-10-01T14:30:00",
+  "usuarioIdentifier": "teste@exemplo.com"
+}
+
+###
+
+### Atualizar uma avaliação existente
+PUT http://localhost:8080/api/v1/avaliacoes/1
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nota": 9,
+  "dataHora": "2023-10-02T15:00:00",
+  "usuario": {
+    "id": 1
+  }
+}
+
+###
+
+### Excluir uma avaliação por ID
+DELETE http://localhost:8080/api/v1/avaliacoes/1
+Accept: application/json

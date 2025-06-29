@@ -1,0 +1,45 @@
+### Obter todas as exposições
+GET http://localhost:8080/api/v1/exposicoes
+Accept: application/json
+
+###
+
+### Criar uma nova exposição
+POST http://localhost:8080/api/v1/exposicoes
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nome": "Exposição de Esculturas",
+  "nomeArtista": "João da Silva",
+  "descricao": "Uma coleção de esculturas modernas.",
+  "inicioExposicao": "2023-10-15T10:00:00",
+  "fimExposicao": "2023-10-30T18:00:00",
+  "usuario": {
+    "id": 1
+  }
+}
+
+###
+
+### Atualizar uma exposição existente
+PUT http://localhost:8080/api/v1/exposicoes/1
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nome": "Exposição de Pinturas",
+  "nomeArtista": "Maria Oliveira",
+  "descricao": "Uma coleção de pinturas contemporâneas.",
+  "inicioExposicao": "2023-11-01T09:00:00",
+  "fimExposicao": "2023-11-20T17:00:00",
+  "usuario": {
+    "id": 1
+  }
+}
+
+###
+
+### Excluir uma exposição por ID
+DELETE http://localhost:8080/api/v1/exposicoes/1
+Accept: application/json

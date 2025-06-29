@@ -1,0 +1,47 @@
+### Obter todas as notificações
+GET http://localhost:8080/api/v1/notificacoes
+Accept: application/json
+
+###
+
+### Criar uma nova notificação
+POST http://localhost:8080/api/v1/notificacoes
+Content-Type: application/json
+Accept: application/json
+
+{
+  "dataHora": "2023-10-05T10:00:00",
+  "descricao": "Notificação sobre evento especial",
+  "tipo": "Evento",
+  "usuario": {
+    "id": 1
+  },
+  "evento": {
+    "id": 2
+  }
+}
+
+###
+
+### Atualizar uma notificação existente
+PUT http://localhost:8080/api/v1/notificacoes/1
+Content-Type: application/json
+Accept: application/json
+
+{
+  "dataHora": "2023-10-06T12:00:00",
+  "descricao": "Notificação atualizada sobre exposição",
+  "tipo": "Exposicao",
+  "usuario": {
+    "id": 1
+  },
+  "exposicao": {
+    "id": 3
+  }
+}
+
+###
+
+### Excluir uma notificação por ID
+DELETE http://localhost:8080/api/v1/notificacoes/1
+Accept: application/json

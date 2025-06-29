@@ -1,0 +1,43 @@
+### Obter todos os usuários
+GET http://localhost:8080/api/v1/usuarios
+Accept: application/json
+
+###
+
+### Criar um novo usuário
+POST http://localhost:8080/api/v1/usuarios
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "usuario@example.com",
+  "telefone": "123456789",
+  "notificacoesExposicoes": true,
+  "notificacoesEventos": false,
+  "notificacoesNovidades": true,
+  "idade": 25,
+  "genero": "Masculino"
+}
+
+###
+
+### Atualizar um usuário existente
+PUT http://localhost:8080/api/v1/usuarios/1
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "usuario_atualizado@example.com",
+  "telefone": "987654321",
+  "notificacoesExposicoes": false,
+  "notificacoesEventos": true,
+  "notificacoesNovidades": false,
+  "idade": 30,
+  "genero": "Feminino"
+}
+
+###
+
+### Excluir um usuário por ID
+DELETE http://localhost:8080/api/v1/usuarios/1
+Accept: application/json

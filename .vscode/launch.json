@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-ProjfabsofttotemmuseumApplication<projfabsofttotemmuseum>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "br.univille.projfabsofttotemmuseum.ProjfabsofttotemmuseumApplication",
+            "projectName": "projfabsofttotemmuseum",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
