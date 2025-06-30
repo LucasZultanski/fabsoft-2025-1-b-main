@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -55,14 +56,24 @@ public class AdminController {
     }
 
     @GetMapping("/reports/evaluations")
-    public ResponseEntity<?> getEvaluationReports(@RequestParam(defaultValue = "all") String period) {
-        Map<String, LocalDateTime> dates = getPeriodDates(period);
-        LocalDateTime startDate = dates.get("start");
-        LocalDateTime endDate = dates.get("end");
-
-        double avgRating = avaliacaoService.getAverageRatingByPeriod(startDate, endDate);
-        long totalRatings = avaliacaoService.getTotalRatingsByPeriod(startDate, endDate);
-
+    public ResponseEntity<?> getEvaluationReports(@RequestParam(defaultValue = "all") String period,
+                                                  @RequestParam(required = false) String startDate,
+                                                  @RequestParam(required = false) String endDate) {
+        LocalDateTime start, end;
+        if (startDate != null && endDate != null) {
+            try {
+                start = LocalDateTime.parse(startDate);
+                end = LocalDateTime.parse(endDate);
+            } catch (DateTimeParseException e) {
+                return ResponseEntity.badRequest().body("Formato de data inválido");
+            }
+        } else {
+            Map<String, LocalDateTime> dates = getPeriodDates(period);
+            start = dates.get("start");
+            end = dates.get("end");
+        }
+        double avgRating = avaliacaoService.getAverageRatingByPeriod(start, end);
+        long totalRatings = avaliacaoService.getTotalRatingsByPeriod(start, end);
         Map<String, Object> response = new HashMap<>();
         response.put("averageRating", avgRating);
         response.put("totalCount", totalRatings);
@@ -70,27 +81,49 @@ public class AdminController {
     }
 
     @GetMapping("/reports/checkins")
-    public ResponseEntity<?> getCheckinReports(@RequestParam(defaultValue = "all") String period) {
-        Map<String, LocalDateTime> dates = getPeriodDates(period);
-        LocalDateTime startDate = dates.get("start");
-        LocalDateTime endDate = dates.get("end");
-
-        long totalCheckins = checkupService.getTotalCheckupsByPeriod(startDate, endDate);
-
+    public ResponseEntity<?> getCheckinReports(@RequestParam(defaultValue = "all") String period,
+                                               @RequestParam(required = false) String startDate,
+                                               @RequestParam(required = false) String endDate) {
+        LocalDateTime start, end;
+        if (startDate != null && endDate != null) {
+            try {
+                start = LocalDateTime.parse(startDate);
+                end = LocalDateTime.parse(endDate);
+            } catch (DateTimeParseException e) {
+                return ResponseEntity.badRequest().body("Formato de data inválido");
+            }
+        } else {
+            Map<String, LocalDateTime> dates = getPeriodDates(period);
+            start = dates.get("start");
+            end = dates.get("end");
+        }
+        long totalCheckins = checkupService.getTotalCheckupsByPeriod(start, end);
         Map<String, Object> response = new HashMap<>();
         response.put("count", totalCheckins);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/reports/checkins-by-gender")
-    public ResponseEntity<Map<String, Long>> getCheckinsByGender(@RequestParam(defaultValue = "month") String period) {
-        Map<String, LocalDateTime> dates = getPeriodDates(period);
-        LocalDateTime startDate = dates.get("start");
-        LocalDateTime endDate = dates.get("end");
+    public ResponseEntity<Map<String, Long>> getCheckinsByGender(@RequestParam(defaultValue = "month") String period,
+                                                                @RequestParam(required = false) String startDate,
+                                                                @RequestParam(required = false) String endDate) {
+        LocalDateTime start, end;
+        if (startDate != null && endDate != null) {
+            try {
+                start = LocalDateTime.parse(startDate);
+                end = LocalDateTime.parse(endDate);
+            } catch (DateTimeParseException e) {
+                return ResponseEntity.badRequest().body(null);
+            }
+        } else {
+            Map<String, LocalDateTime> dates = getPeriodDates(period);
+            start = dates.get("start");
+            end = dates.get("end");
+        }
         List<Checkup> checkups = checkupService.getAllCheckups().stream()
             .filter(c -> c.getDataHora() != null &&
-                        !c.getDataHora().isBefore(startDate) &&
-                        !c.getDataHora().isAfter(endDate))
+                        !c.getDataHora().isBefore(start) &&
+                        !c.getDataHora().isAfter(end))
             .collect(Collectors.toList());
         Map<String, Long> result = checkups.stream()
             .collect(Collectors.groupingBy(
@@ -101,14 +134,26 @@ public class AdminController {
     }
 
     @GetMapping("/reports/checkins-by-state")
-    public ResponseEntity<Map<String, Long>> getCheckinsByState(@RequestParam(defaultValue = "month") String period) {
-        Map<String, LocalDateTime> dates = getPeriodDates(period);
-        LocalDateTime startDate = dates.get("start");
-        LocalDateTime endDate = dates.get("end");
+    public ResponseEntity<Map<String, Long>> getCheckinsByState(@RequestParam(defaultValue = "month") String period,
+                                                                @RequestParam(required = false) String startDate,
+                                                                @RequestParam(required = false) String endDate) {
+        LocalDateTime start, end;
+        if (startDate != null && endDate != null) {
+            try {
+                start = LocalDateTime.parse(startDate);
+                end = LocalDateTime.parse(endDate);
+            } catch (DateTimeParseException e) {
+                return ResponseEntity.badRequest().body(null);
+            }
+        } else {
+            Map<String, LocalDateTime> dates = getPeriodDates(period);
+            start = dates.get("start");
+            end = dates.get("end");
+        }
         List<Checkup> checkups = checkupService.getAllCheckups().stream()
             .filter(c -> c.getDataHora() != null &&
-                        !c.getDataHora().isBefore(startDate) &&
-                        !c.getDataHora().isAfter(endDate))
+                        !c.getDataHora().isBefore(start) &&
+                        !c.getDataHora().isAfter(end))
             .collect(Collectors.toList());
         Map<String, Long> result = checkups.stream()
             .collect(Collectors.groupingBy(
@@ -119,14 +164,26 @@ public class AdminController {
     }
 
     @GetMapping("/reports/checkins-by-age-group")
-    public ResponseEntity<Map<String, Long>> getCheckinsByAgeGroup(@RequestParam(defaultValue = "month") String period) {
-        Map<String, LocalDateTime> dates = getPeriodDates(period);
-        LocalDateTime startDate = dates.get("start");
-        LocalDateTime endDate = dates.get("end");
+    public ResponseEntity<Map<String, Long>> getCheckinsByAgeGroup(@RequestParam(defaultValue = "month") String period,
+                                                                  @RequestParam(required = false) String startDate,
+                                                                  @RequestParam(required = false) String endDate) {
+        LocalDateTime start, end;
+        if (startDate != null && endDate != null) {
+            try {
+                start = LocalDateTime.parse(startDate);
+                end = LocalDateTime.parse(endDate);
+            } catch (DateTimeParseException e) {
+                return ResponseEntity.badRequest().body(null);
+            }
+        } else {
+            Map<String, LocalDateTime> dates = getPeriodDates(period);
+            start = dates.get("start");
+            end = dates.get("end");
+        }
         List<Checkup> checkups = checkupService.getAllCheckups().stream()
             .filter(c -> c.getDataHora() != null &&
-                        !c.getDataHora().isBefore(startDate) &&
-                        !c.getDataHora().isAfter(endDate))
+                        !c.getDataHora().isBefore(start) &&
+                        !c.getDataHora().isAfter(end))
             .collect(Collectors.toList());
         Map<String, Long> result = checkups.stream()
             .collect(Collectors.groupingBy(
@@ -143,14 +200,26 @@ public class AdminController {
     }
 
     @GetMapping("/reports/checkins-by-city")
-    public ResponseEntity<Map<String, Long>> getCheckinsByCity(@RequestParam(defaultValue = "month") String period) {
-        Map<String, LocalDateTime> dates = getPeriodDates(period);
-        LocalDateTime startDate = dates.get("start");
-        LocalDateTime endDate = dates.get("end");
+    public ResponseEntity<Map<String, Long>> getCheckinsByCity(@RequestParam(defaultValue = "month") String period,
+                                                               @RequestParam(required = false) String startDate,
+                                                               @RequestParam(required = false) String endDate) {
+        LocalDateTime start, end;
+        if (startDate != null && endDate != null) {
+            try {
+                start = LocalDateTime.parse(startDate);
+                end = LocalDateTime.parse(endDate);
+            } catch (DateTimeParseException e) {
+                return ResponseEntity.badRequest().body(null);
+            }
+        } else {
+            Map<String, LocalDateTime> dates = getPeriodDates(period);
+            start = dates.get("start");
+            end = dates.get("end");
+        }
         List<Checkup> checkups = checkupService.getAllCheckups().stream()
             .filter(c -> c.getDataHora() != null &&
-                        !c.getDataHora().isBefore(startDate) &&
-                        !c.getDataHora().isAfter(endDate))
+                        !c.getDataHora().isBefore(start) &&
+                        !c.getDataHora().isAfter(end))
             .collect(Collectors.toList());
         Map<String, Long> result = checkups.stream()
             .collect(Collectors.groupingBy(
@@ -167,9 +236,21 @@ public class AdminController {
     }
 
     @GetMapping("/users")
-    public ResponseEntity<List<Usuario>> getAllUsers() {
-        List<Usuario> users = usuarioService.getAllUsuarios();
-        return new ResponseEntity<>(users, HttpStatus.OK);
+    public ResponseEntity<List<Usuario>> getAllUsers(@RequestParam(required = false) String startDate,
+                                                    @RequestParam(required = false) String endDate) {
+        if (startDate != null && endDate != null) {
+            try {
+                LocalDateTime start = LocalDateTime.parse(startDate);
+                LocalDateTime end = LocalDateTime.parse(endDate);
+                List<Usuario> users = usuarioService.getUsuariosComCheckinNoPeriodo(start, end);
+                return new ResponseEntity<>(users, HttpStatus.OK);
+            } catch (Exception e) {
+                return ResponseEntity.badRequest().body(null);
+            }
+        } else {
+            List<Usuario> users = usuarioService.getAllUsuarios();
+            return new ResponseEntity<>(users, HttpStatus.OK);
+        }
     }
 
     @GetMapping("/export-powerbi")

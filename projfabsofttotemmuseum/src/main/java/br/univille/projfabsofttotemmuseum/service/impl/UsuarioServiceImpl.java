@@ -3,19 +3,26 @@ package br.univille.projfabsofttotemmuseum.service.impl;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
+import java.time.LocalDateTime;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.univille.projfabsofttotemmuseum.entity.Usuario;
 import br.univille.projfabsofttotemmuseum.repository.UsuarioRepository;
+import br.univille.projfabsofttotemmuseum.repository.CheckupRepository;
 import br.univille.projfabsofttotemmuseum.service.UsuarioService;
+import br.univille.projfabsofttotemmuseum.entity.Checkup;
 
 @Service
 public class UsuarioServiceImpl implements UsuarioService {
 
     @Autowired
     private UsuarioRepository repository;
+
+    @Autowired
+    private CheckupRepository checkupRepository;
 
     // Padrão regex para validação de email
     private static final Pattern EMAIL_PATTERN = Pattern.compile("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$");
@@ -114,5 +121,15 @@ public class UsuarioServiceImpl implements UsuarioService {
             usuario.setRole("ROLE_VISITOR"); // Define o papel padrão
             return repository.save(usuario);
         }
+    }
+
+    @Override
+    public List<Usuario> getUsuariosComCheckinNoPeriodo(LocalDateTime start, LocalDateTime end) {
+        List<Checkup> checkins = checkupRepository.findByDataHoraBetween(start, end);
+        return checkins.stream()
+                .map(Checkup::getUsuario)
+                .filter(u -> u != null)
+                .distinct()
+                .collect(Collectors.toList());
     }
 }
