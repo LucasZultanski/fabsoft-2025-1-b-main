@@ -12,6 +12,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- Vincula ao arquivo CSS externo para estilos personalizados -->
     <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" type="image/jpeg" href="icone.jpeg">
 </head>
 <body class="font-inter bg-gray-100 min-h-screen flex flex-col items-center justify-center p-4">
 
@@ -19,7 +20,7 @@
     <header class="w-full max-w-4xl bg-white shadow-lg rounded-b-xl py-4 px-6 flex justify-between items-center z-10">
         <div class="flex items-center">
             <!-- Ícone/Logo do Museu -->
-            <img src="https://placehold.co/40x40/2563EB/FFFFFF?text=M" alt="Logo do Museu" class="mr-3 rounded-full shadow-md">
+            <img src="icone.jpg" alt="Ícone do Museu" class="mr-3 rounded-full shadow-md" style="width: 40px; height: 40px; object-fit: cover;">
             <h1 class="text-3xl font-extrabold text-blue-800">Totem do Museu</h1>
         </div>
         <button id="adminLoginButton" class="btn-primary" onclick="showScreen('adminLoginScreen')">
@@ -310,6 +311,60 @@
             <button class="btn-submit bg-indigo-600 hover:bg-indigo-700 mt-6 w-full" onclick="exportUsersTableToExcel()">
                 <i class="fas fa-file-export mr-3"></i> Exportar Usuários para Excel
             </button>
+
+            <!-- Botão para acessar tela de postagem de evento (adicionar ao dashboard admin) -->
+            <button id="postEventButton" class="btn-primary mt-6 mb-4" onclick="showScreen('adminPostEventScreen')">
+                <i class="fas fa-plus mr-2"></i> Nova Postagem de Evento
+            </button>
+
+            <!-- Tela de Postagem de Evento -->
+            <div id="adminPostEventScreen" class="screen text-center" style="display:none;">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">Nova Postagem de Evento</h2>
+                <form id="eventPostForm" enctype="multipart/form-data">
+                    <div class="input-group mb-4">
+                        <label for="eventTitle" class="block text-left text-lg font-medium text-gray-700 mb-2">Título do Evento:</label>
+                        <input type="text" id="eventTitle" name="title" class="form-input" required>
+                    </div>
+                    <div class="input-group mb-4">
+                        <label for="eventImage" class="block text-left text-lg font-medium text-gray-700 mb-2">Imagem do Evento:</label>
+                        <input type="file" id="eventImage" name="image" accept="image/*" class="form-input" required>
+                    </div>
+                    <div class="input-group mb-4">
+                        <label for="notificationText" class="block text-left text-lg font-medium text-gray-700 mb-2">Texto da Notificação:</label>
+                        <textarea id="notificationText" name="notificationText" class="form-input" rows="2" required></textarea>
+                    </div>
+                    <button type="submit" class="btn-submit bg-blue-600 hover:bg-blue-700 w-full">Postar Evento</button>
+                </form>
+                <div id="eventPostResult" class="mt-4"></div>
+                <button class="btn-secondary mt-4" onclick="showScreen('adminDashboardScreen')">Voltar ao Dashboard</button>
+            </div>
+
+            <!-- Botão para acessar tela de criação de notificação -->
+            <button id="createNotificationButton" class="btn-primary mt-6 mb-4" onclick="showScreen('createNotificationScreen')">
+                <i class="fas fa-bell mr-2"></i> Criar Notificação
+            </button>
+
+            <!-- Tela de Criação de Notificação -->
+            <div id="createNotificationScreen" class="screen text-center" style="display:none;">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">Criar Notificação</h2>
+                <form id="notificationForm" enctype="multipart/form-data">
+                    <div class="input-group mb-4">
+                        <label for="notificationTitle" class="block text-left text-lg font-medium text-gray-700 mb-2">Título da Notificação:</label>
+                        <input type="text" id="notificationTitle" name="notificationTitle" class="form-input" required>
+                    </div>
+                    <div class="input-group mb-4">
+                        <label for="notificationImage" class="block text-left text-lg font-medium text-gray-700 mb-2">Imagem (opcional):</label>
+                        <input type="file" id="notificationImage" name="notificationImage" accept="image/*" class="form-input">
+                    </div>
+                    <div class="input-group mb-4">
+                        <label for="notificationTextOnly" class="block text-left text-lg font-medium text-gray-700 mb-2">Texto da Notificação:</label>
+                        <textarea id="notificationTextOnly" name="notificationTextOnly" class="form-input" rows="3" required></textarea>
+                    </div>
+                    <button type="submit" class="btn-submit bg-blue-600 hover:bg-blue-700 w-full">Enviar Notificação</button>
+                </form>
+                <div id="notificationResult" class="mt-4"></div>
+                <button class="btn-secondary mt-4" onclick="showScreen('adminDashboardScreen')">Voltar ao Dashboard</button>
+            </div>
         </div>
 
     </main>

@@ -1,4 +1,4 @@
-const screens = ['homeScreen', 'checkinScreen', 'avaliacaoScreen', 'notificacaoScreen', 'adminLoginScreen', 'adminDashboardScreen'];
+const screens = ['homeScreen', 'checkinScreen', 'avaliacaoScreen', 'notificacaoScreen', 'adminLoginScreen', 'adminDashboardScreen', 'adminPostEventScreen'];
 const backButton = document.getElementById('backButton');
 const messageModal = document.getElementById('messageModal');
 const modalTitle = document.getElementById('modalTitle');
@@ -151,6 +151,36 @@ window.addEventListener('DOMContentLoaded', function() {
     document.getElementById('filterStartDate').addEventListener('input', updateDateDisplays);
     document.getElementById('filterEndDate').addEventListener('input', updateDateDisplays);
     updateDateDisplays();
+
+    const eventPostForm = document.getElementById('eventPostForm');
+    if (eventPostForm) {
+        eventPostForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const formData = new FormData(eventPostForm);
+            const response = await fetch('/api/v1/eventos/postar', {
+                method: 'POST',
+                body: formData
+            });
+            const result = await response.text();
+            document.getElementById('eventPostResult').innerText = result;
+            eventPostForm.reset();
+        });
+    }
+
+    const notificationForm = document.getElementById('notificationForm');
+    if (notificationForm) {
+        notificationForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const formData = new FormData(notificationForm);
+            const response = await fetch('/api/v1/notificacoes/enviar', {
+                method: 'POST',
+                body: formData
+            });
+            const result = await response.text();
+            document.getElementById('notificationResult').innerText = result;
+            notificationForm.reset();
+        });
+    }
 });
 // Fecha modal ao clicar fora do conteúdo
 window.addEventListener('mousedown', function(e) {

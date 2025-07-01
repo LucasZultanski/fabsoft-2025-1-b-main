@@ -50,6 +50,9 @@ public class Usuario {
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Notificacao> notificacoes;
 
+    private boolean notificaEmail;
+    private boolean notificaWhatsapp;
+
     public long getId() {
         return id;
     }
@@ -184,5 +187,21 @@ public class Usuario {
 
     public void setNotificacoes(List<Notificacao> notificacoes) {
         this.notificacoes = notificacoes;
+    }
+
+    public boolean isNotificaEmail() {
+        return notificaEmail;
+    }
+
+    public void setNotificaEmail(boolean notificaEmail) {
+        this.notificaEmail = notificaEmail;
+    }
+
+    public boolean isNotificaWhatsapp() {
+        return notificaWhatsapp;
+    }
+
+    public void setNotificaWhatsapp(boolean notificaWhatsapp) {
+        this.notificaWhatsapp = notificaWhatsapp;
     }
 }

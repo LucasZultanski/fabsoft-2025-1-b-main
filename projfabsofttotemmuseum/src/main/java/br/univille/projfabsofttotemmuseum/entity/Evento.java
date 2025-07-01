@@ -19,6 +19,15 @@ public class Evento {
     @Column(nullable = false)
     private String local;
 
+    @Column(nullable = false)
+    private String titulo;
+
+    @Column(nullable = false)
+    private String texto;
+
+    @Column(nullable = false)
+    private String imagem;
+
     @ManyToMany
     @JoinTable(
         name = "evento_usuario",
@@ -57,6 +66,30 @@ public class Evento {
 
     public void setLocal(String local) {
         this.local = local;
+    }
+
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
+
+    public String getTexto() {
+        return texto;
+    }
+
+    public void setTexto(String texto) {
+        this.texto = texto;
+    }
+
+    public String getImagem() {
+        return imagem;
+    }
+
+    public void setImagem(String imagem) {
+        this.imagem = imagem;
     }
 
     public List<Usuario> getUsuariosNotificados() {
